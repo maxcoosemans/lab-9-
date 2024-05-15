@@ -1,0 +1,105 @@
+#include <iostream>
+#include <stack>
+#include <queue>
+#include <string>
+
+using namespace std;
+
+// Estructura para representar una tarea
+struct Task {
+    string description;
+    Task(string desc) : description(desc) {}
+};
+
+// Clase para manejar las tareas
+class TaskManager {
+private:
+    stack<Task> taskStack; // Pila de tareas
+    queue<Task> taskQueue; // Cola de tareas
+
+public:
+    // Agregar una tarea a la pila
+    void addTask(string description) {
+        Task newTask(description);
+        taskStack.push(newTask);
+        cout << "Tarea agregada: " << description << endl;
+    }
+
+    // Completar y eliminar la última tarea agregada (de la pila)
+    void completeLastTask() {
+        if (!taskStack.empty()) {
+            cout << "Tarea completada: " << taskStack.top().description << endl;
+            taskStack.pop();
+        } else {
+            cout << "No hay tareas pendientes en la pila." << endl;
+        }
+    }
+
+    // Atender y eliminar la tarea más antigua (de la cola)
+    void attendOldestTask() {
+        if (!taskQueue.empty()) {
+            cout << "Tarea atendida: " << taskQueue.front().description << endl;
+            taskQueue.pop();
+        } else {
+            cout << "No hay tareas pendientes en la cola." << endl;
+        }
+    }
+
+    // Mostrar todas las tareas
+    void showAllTasks() {
+        cout << "Tareas pendientes (pila):" << endl;
+        stack<Task> tempStack = taskStack;
+        while (!tempStack.empty()) {
+            cout << "- " << tempStack.top().description << endl;
+            tempStack.pop();
+        }
+        cout << "Tareas pendientes (cola):" << endl;
+        queue<Task> tempQueue = taskQueue;
+        while (!tempQueue.empty()) {
+            cout << "- " << tempQueue.front().description << endl;
+            tempQueue.pop();
+        }
+    }
+};
+
+int main() {
+    TaskManager manager;
+    int choice;
+    string description;
+
+    do {
+        cout << "\nMenú:" << endl;
+        cout << "1. Agregar una tarea" << endl;
+        cout << "2. Completar la última tarea" << endl;
+        cout << "3. Atender la tarea más antigua" << endl;
+        cout << "4. Mostrar todas las tareas" << endl;
+        cout << "5. Salir" << endl;
+        cout << "Seleccione una opción: ";
+        cin >> choice;
+
+        switch(choice) {
+            case 1:
+                cout << "Ingrese la descripción de la tarea: ";
+                cin.ignore();
+                getline(cin, description);
+                manager.addTask(description);
+                break;
+            case 2:
+                manager.completeLastTask();
+                break;
+            case 3:
+                manager.attendOldestTask();
+                break;
+            case 4:
+                manager.showAllTasks();
+                break;
+            case 5:
+                cout << "Saliendo del programa..." << endl;
+                break;
+            default:
+                cout << "Opción inválida. Inténtelo de nuevo." << endl;
+        }
+    } while(choice != 5);
+
+    return 0;
+}
